@@ -41,7 +41,7 @@
     "build": "rollup -c",
     "test": "eslint src/** --ext .js --quiet",
     "release": "standard-version --no-verify",
-    "prepublish": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "husky": {
     "hooks": {
@@ -52,8 +52,7 @@
     "@babel/runtime": "^7.13.0",
     "invariant": "^2.2.4",
     "node-sass": "^6.0.0",
-    "prop-types": "^15.5.7",
-    "sass": "^1.52.0"
+    "prop-types": "^15.5.7"
   },
   "peerDependencies": {
     "prop-types": "^15.5.7",

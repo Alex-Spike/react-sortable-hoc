@@ -41,7 +41,7 @@
     "build": "rollup -c",
     "test": "eslint src/** --ext .js --quiet",
     "release": "standard-version --no-verify",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm i && npm run build"
   },
   "husky": {
     "hooks": {

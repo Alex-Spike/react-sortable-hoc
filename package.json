@@ -58,7 +58,7 @@
     "react-dom": "^16.3.0 || ^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
-    "node-sass": "^6.0.0",
+    "sass": "^1.52.0",
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/plugin-transform-runtime": "^7.2.0",

@@ -1,6 +1,4 @@
 import * as React from 'react';
-import {findDOMNode} from 'react-dom';
-import invariant from 'invariant';
 
 import Manager from '../Manager';
 import {isSortableHandle} from '../SortableHandle';
@@ -40,10 +38,7 @@ export const SortableContext = React.createContext({
   manager: {},
 });
 
-export default function sortableContainer(
-  WrappedComponent,
-  config = {withRef: false},
-) {
+export default function sortableContainer(WrappedComponent) {
   return class WithSortableContainer extends React.Component {
     constructor(props) {
       super(props);
@@ -95,11 +90,11 @@ export default function sortableContainer(
           this.onAutoScroll,
         );
 
-        Object.keys(this.events).forEach((key) =>
-          events[key].forEach((eventName) =>
-            this.container.addEventListener(eventName, this.events[key], false),
-          ),
-        );
+        Object.keys(this.events).forEach((key) => {
+          return events[key].forEach((eventName) => {
+            this.container.addEventListener(eventName, this.events[key], false);
+          });
+        });
 
         this.container.addEventListener('keydown', this.handleKeyDown);
       });
@@ -890,11 +885,6 @@ export default function sortableContainer(
     };
 
     getWrappedInstance() {
-      invariant(
-        config.withRef,
-        'To access the wrapped instance, you need to pass in {withRef: true} as the second argument of the SortableContainer() call',
-      );
-
       return this.wrappedInstance.current;
     }
 
@@ -902,12 +892,10 @@ export default function sortableContainer(
       const {getContainer} = this.props;
 
       if (typeof getContainer !== 'function') {
-        return findDOMNode(this);
+        return this.wrappedInstance.current;
       }
 
-      return getContainer(
-        config.withRef ? this.getWrappedInstance() : undefined,
-      );
+      return getContainer(this.getWrappedInstance());
     }
 
     handleKeyDown = (event) => {
@@ -1044,11 +1032,12 @@ export default function sortableContainer(
     };
 
     render() {
-      const ref = config.withRef ? this.wrappedInstance : null;
-
       return (
         <SortableContext.Provider value={this.sortableContextValue}>
-          <WrappedComponent ref={ref} {...omit(this.props, omittedProps)} />
+          <WrappedComponent
+            ref={this.wrappedInstance}
+            {...omit(this.props, omittedProps)}
+          />
         </SortableContext.Provider>
       );
     }

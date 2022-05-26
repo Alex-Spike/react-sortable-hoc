@@ -1,7 +1,5 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import {findDOMNode} from 'react-dom';
-import invariant from 'invariant';
 import {SortableContext} from '../SortableContainer';
 
 import {provideDisplayName, omit} from '../utils';
@@ -14,10 +12,7 @@ const propTypes = {
 
 const omittedProps = Object.keys(propTypes);
 
-export default function sortableElement(
-  WrappedComponent,
-  config = {withRef: false},
-) {
+export default function sortableElement(WrappedComponent) {
   return class WithSortableElement extends React.Component {
     static displayName = provideDisplayName(
       'sortableElement',
@@ -31,6 +26,8 @@ export default function sortableElement(
     static defaultProps = {
       collection: 0,
     };
+
+    wrappedInstance = React.createRef();
 
     componentDidMount() {
       this.register();
@@ -59,7 +56,7 @@ export default function sortableElement(
 
     register() {
       const {collection, disabled, index} = this.props;
-      const node = findDOMNode(this);
+      const node = this.wrappedInstance.current;
 
       node.sortableInfo = {
         collection,
@@ -79,19 +76,16 @@ export default function sortableElement(
     }
 
     getWrappedInstance() {
-      invariant(
-        config.withRef,
-        'To access the wrapped instance, you need to pass in {withRef: true} as the second argument of the SortableElement() call',
-      );
       return this.wrappedInstance.current;
     }
 
-    wrappedInstance = React.createRef();
-
     render() {
-      const ref = config.withRef ? this.wrappedInstance : null;
-
-      return <WrappedComponent ref={ref} {...omit(this.props, omittedProps)} />;
+      return (
+        <WrappedComponent
+          ref={this.wrappedInstance}
+          {...omit(this.props, omittedProps)}
+        />
+      );
     }
   };
 }

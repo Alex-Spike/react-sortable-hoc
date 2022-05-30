@@ -8,6 +8,8 @@ import pkg from './package.json';
 
 const external = (id) => !id.startsWith('.') && !id.startsWith('/');
 
+const getPath = (path) => `_${path}`;
+
 const babelConfig = (
   {useESModules, targets} = {
     useESModules: true,
@@ -38,7 +40,9 @@ const umdConfig = ({minify} = {}) => ({
   external: ['react', 'react-dom', 'prop-types'],
   output: {
     name: 'SortableHOC',
-    file: minify ? pkg["umd:main"].replace('.js', '.min.js') : pkg["umd:main"],
+    file: minify
+      ? getPath(pkg['umd:main']).replace('.js', '.min.js')
+      : getPath(pkg['umd:main']),
     format: 'umd',
     globals: {
       react: 'React',
@@ -59,7 +63,7 @@ const umdConfig = ({minify} = {}) => ({
       ),
     }),
     commonjs(),
-    minify ? uglify() : { },
+    minify ? uglify() : {},
     filesize(),
   ],
 });
@@ -73,7 +77,7 @@ const rollupConfig = [
   {
     input: pkg.source,
     external,
-    output: [{file: pkg.main, format: 'cjs'}],
+    output: [{file: getPath(pkg.main), format: 'cjs'}],
     plugins: [resolve(), babel(babelConfig({useESModules: false})), filesize()],
   },
 
@@ -81,7 +85,7 @@ const rollupConfig = [
   {
     input: pkg.source,
     external,
-    output: [{file: pkg.module, format: 'esm'}],
+    output: [{file: getPath(pkg.module), format: 'esm'}],
     plugins: [resolve(), babel(babelConfig()), filesize()],
   },
 ];

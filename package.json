@@ -43,7 +43,8 @@
     "release": "standard-version --no-verify"
   },
   "files": [
-    "src"
+    "src",
+    "types"
   ],
   "husky": {
     "hooks": {

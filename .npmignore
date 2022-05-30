@@ -2,7 +2,6 @@
 .babelrc
 coverage
 test
-src
 .*
 *.md
 codecov.yml

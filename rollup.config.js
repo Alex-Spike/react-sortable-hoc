@@ -8,7 +8,7 @@ import pkg from './package.json';
 
 const external = (id) => !id.startsWith('.') && !id.startsWith('/');
 
-const getPath = (path) => `_${path}`;
+const getPath = (path) => `src_${path}`;
 
 const babelConfig = (
   {useESModules, targets} = {
